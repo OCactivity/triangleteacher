@@ -43,3 +43,11 @@ button {
 button:hover {
     background-color: #5555cc;
 }
+
+.footer {
+    text-align: center; /* 中央揃え */
+    margin-top: 20px; /* 上部のマージン */
+    padding: 10px; /* パディング */
+    font-size: 14px; /* フォントサイズ */
+    color: #666; /* 文字色 */
+}
