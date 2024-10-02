@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角形をおしえるくん</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="output-container">
+            <div class="top-left">
+                <h2>三角形の種類</h2>
+                <p id="triangleType"></p>
+            </div>
+            <div class="bottom-left">
+                <h2>入力された辺の長さ</h2>
+                <p id="sideLengths"></p>
+            </div>
+            <div class="top-right">
+                <h2>三角形の画像</h2>
+                <canvas id="triangleCanvas" width="300" height="300"></canvas>
+            </div>
+            <div class="bottom-right">
+                <button id="retryButton" onclick="resetForm()">他の三角形を調べる</button>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h1>三角形をおしえるくん</h1>
+            <p>三角形の3辺の長さを入力してね:</p>
+            <form id="triangleForm">
+                <label for="side1">1辺目の長さ:</label>
+                <input type="number" id="side1" required><br><br>
+                <label for="side2">2辺目の長さ:</label>
+                <input type="number" id="side2" required><br><br>
+                <label for="side3">3辺目の長さ:</label>
+                <input type="number" id="side3" required><br><br>
+                <button type="button" onclick="checkTriangle()">三角形を調べる</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
