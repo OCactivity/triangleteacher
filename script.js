@@ -169,7 +169,6 @@ function resetForm() {
     document.getElementById("side3").value = "";
     document.getElementById("triangleType").innerText = "";
     document.getElementById("sideLengths").innerText = "";
-    document.getElementById("triangleCanvas").style.display = 'none'; // キャンバスを隠す
     document.querySelector('.output-container').style.display = 'none';
     document.querySelector('.form-container').style.display = 'block';
 }
