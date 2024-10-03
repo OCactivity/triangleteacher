@@ -75,7 +75,7 @@ function drawTriangle(type, a, b, c) {
 }
 
 function drawEquilateralTriangle(ctx) {
-    const size = 100; // 正三角形の1辺の長さ
+    const size = 150; // 正三角形の1辺の長さ
     const height = size * Math.sqrt(3) / 2; // 高さを計算
     const centerX = 150; // 中心のX座標
     const centerY = 150; // 中心のY座標
