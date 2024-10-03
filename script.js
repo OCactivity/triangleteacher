@@ -75,12 +75,28 @@ function drawTriangle(type, a, b, c) {
 }
 
 function drawEquilateralTriangle(ctx) {
-    const size = 100;
-    ctx.moveTo(150, 50);
-    ctx.lineTo(100, 200);
-    ctx.lineTo(200, 200);
-    ctx.lineTo(150, 50);
+    const size = 100; // 正三角形の1辺の長さ
+    const height = size * Math.sqrt(3) / 2; // 高さを計算
+    const centerX = 150; // 中心のX座標
+    const centerY = 150; // 中心のY座標
+
+    // 各頂点の座標を計算
+    const topX = centerX;
+    const topY = centerY - height / 2;
+    const leftX = centerX - size / 2;
+    const leftY = centerY + height / 2;
+    const rightX = centerX + size / 2;
+    const rightY = centerY + height / 2;
+
+    // 三角形を描画
+    ctx.beginPath();
+    ctx.moveTo(topX, topY);
+    ctx.lineTo(leftX, leftY);
+    ctx.lineTo(rightX, rightY);
+    ctx.closePath();
+
     ctx.fillStyle = "lightblue"; // 色を設定
+    ctx.fill();
 }
 
 function drawIsoscelesTriangle(ctx) {
