@@ -169,6 +169,22 @@ function resetForm() {
     document.getElementById("side3").value = "";
     document.getElementById("triangleType").innerText = "";
     document.getElementById("sideLengths").innerText = "";
+
+    // Canvas をクリア
+    const canvas = document.getElementById("triangleCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Canvas のリサイズ (必要であれば)
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    // スマホ向けに再描画するためにディスプレイをリフレッシュ
+    canvas.style.display = 'none'; 
+    setTimeout(() => {
+        canvas.style.display = 'block'; 
+    }, 100); // 少し待機してから再表示
+
     document.querySelector('.output-container').style.display = 'none';
     document.querySelector('.form-container').style.display = 'block';
 }
