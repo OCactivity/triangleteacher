@@ -1,8 +1,39 @@
 function checkTriangle() {
-    const a = parseFloat(document.getElementById("side1").value);
-    const b = parseFloat(document.getElementById("side2").value);
-    const c = parseFloat(document.getElementById("side3").value);
-    
+    const side1Input = document.getElementById("side1");
+    const side2Input = document.getElementById("side2");
+    const side3Input = document.getElementById("side3");
+
+    const a = parseFloat(side1Input.value);
+    const b = parseFloat(side2Input.value);
+    const c = parseFloat(side3Input.value);
+
+    // エラーフラグ
+    let hasError = false;
+
+    // 数値バリデーション関数
+    function validateNumber(inputElement, value) {
+        if (isNaN(value) || value <= 0) {
+            inputElement.style.backgroundColor = "lightcoral"; // エラーの場合は赤色
+            inputElement.value = "エラー: 数字を入力してください"; // エラーメッセージ
+            hasError = true;
+        } else {
+            inputElement.style.backgroundColor = ""; // 正しい場合は元の色に戻す
+        }
+    }
+
+    // 各辺の入力をチェック
+    validateNumber(side1Input, a);
+    validateNumber(side2Input, b);
+    validateNumber(side3Input, c);
+
+    // エラーがあれば終了
+    if (hasError) {
+        document.getElementById("triangleType").innerText = "";
+        document.getElementById("sideLengths").innerText = "";
+        document.getElementById("triangleCanvas").style.display = 'none'; // 画像を表示しない
+        return;
+    }
+
     let result = "";
     // 三角形が成立するかチェック
     if (a + b <= c || b + c <= a || c + a <= b) {
@@ -10,12 +41,12 @@ function checkTriangle() {
         document.getElementById("triangleCanvas").style.display = 'none'; // 画像を表示しない
     } else {
         // 三角形の種類を判定
-        if (a === b && b === c) {
+        if (Math.abs(a - b) < Number.EPSILON && Math.abs(b - c) < Number.EPSILON) {
             result = "正三角形";
             drawTriangle("正三角形", a, b, c);
-        } else if (a === b || b === c || c === a) {
+        } else if (Math.abs(a - b) < Number.EPSILON || Math.abs(b - c) < Number.EPSILON || Math.abs(c - a) < Number.EPSILON) {
             // 二等辺三角形の場合の鋭角・鈍角判定
-            const base = (a === b) ? c : (b === c) ? a : b;
+            const base = (Math.abs(a - b) < Number.EPSILON) ? c : (Math.abs(b - c) < Number.EPSILON) ? a : b;
             if (isAcuteIsosceles(a, base)) {
                 result = "鋭角二等辺三角形";
                 drawTriangle("鋭角二等辺三角形", a, b, c);
@@ -39,13 +70,14 @@ function checkTriangle() {
     document.querySelector('.form-container').style.display = 'none';
 }
 
+
 function isAcuteIsosceles(a, base) {
-    return base ** 2 < 2 * a ** 2; // 鋭角二等辺三角形の条件
+    return base ** 2 < 2 * a ** 2 + Number.EPSILON; // 小数点誤差を許容
 }
 
 function isRightAngle(a, b, c) {
     const sides = [a, b, c].sort((x, y) => x - y);
-    return Math.abs(sides[0] ** 2 + sides[1] ** 2 - sides[2] ** 2) < 0.0001;
+    return Math.abs(sides[0] ** 2 + sides[1] ** 2 - sides[2] ** 2) < Number.EPSILON;
 }
 
 function drawTriangle(type, a, b, c) {
@@ -63,8 +95,6 @@ function drawTriangle(type, a, b, c) {
         drawIsoscelesTriangle(ctx, "obtuse");
     } else if (type === "直角三角形") {
         drawRightTriangle(ctx);
-    } else if (type === "直角二等辺三角形") {
-        drawRightIsoscelesTriangle(ctx);
     } else if (type === "不等辺三角形") {
         drawScaleneTriangle(ctx);
     }
@@ -80,6 +110,9 @@ function drawTriangle(type, a, b, c) {
     ctx.fill();
     ctx.stroke();
 }
+
+// 他の関数（drawEquilateralTriangle, drawIsoscelesTriangleなど）はそのまま
+
 
 function drawEquilateralTriangle(ctx) {
     const size = 150; // 正三角形の1辺の長さ
