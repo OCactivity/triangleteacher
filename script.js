@@ -14,12 +14,14 @@ function checkTriangle() {
             result = "正三角形";
             drawTriangle("正三角形", a, b, c);
         } else if (a === b || b === c || c === a) {
-            if (isRightAngle(a, b, c)) {
-                result = "直角二等辺三角形";
-                drawTriangle("直角二等辺三角形", a, b, c);
+            // 二等辺三角形の場合の鋭角・鈍角判定
+            const base = (a === b) ? c : (b === c) ? a : b;
+            if (isAcuteIsosceles(a, base)) {
+                result = "鋭角二等辺三角形";
+                drawTriangle("鋭角二等辺三角形", a, b, c);
             } else {
-                result = "二等辺三角形";
-                drawTriangle("二等辺三角形", a, b, c);
+                result = "鈍角二等辺三角形";
+                drawTriangle("鈍角二等辺三角形", a, b, c);
             }
         } else if (isRightAngle(a, b, c)) {
             result = "直角三角形";
@@ -37,6 +39,10 @@ function checkTriangle() {
     document.querySelector('.form-container').style.display = 'none';
 }
 
+function isAcuteIsosceles(a, base) {
+    return base ** 2 < 2 * a ** 2; // 鋭角二等辺三角形の条件
+}
+
 function isRightAngle(a, b, c) {
     const sides = [a, b, c].sort((x, y) => x - y);
     return Math.abs(sides[0] ** 2 + sides[1] ** 2 - sides[2] ** 2) < 0.0001;
@@ -51,8 +57,10 @@ function drawTriangle(type, a, b, c) {
     ctx.beginPath();
     if (type === "正三角形") {
         drawEquilateralTriangle(ctx);
-    } else if (type === "二等辺三角形") {
-        drawIsoscelesTriangle(ctx);
+    } else if (type === "鋭角二等辺三角形") {
+        drawIsoscelesTriangle(ctx, "acute");
+    } else if (type === "鈍角二等辺三角形") {
+        drawIsoscelesTriangle(ctx, "obtuse");
     } else if (type === "直角三角形") {
         drawRightTriangle(ctx);
     } else if (type === "直角二等辺三角形") {
@@ -71,7 +79,6 @@ function drawTriangle(type, a, b, c) {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    document.getElementById("triangleCanvas").style.display = 'block'; // 画像を表示
 }
 
 function drawEquilateralTriangle(ctx) {
@@ -99,39 +106,61 @@ function drawEquilateralTriangle(ctx) {
     ctx.fill();
 }
 
-function drawIsoscelesTriangle(ctx) {
-    const base = 150;
-    const height = 100;
-    ctx.moveTo(125, 50);
-    ctx.lineTo(75, 150);
-    ctx.lineTo(175, 150);
-    ctx.lineTo(125, 50);
+function drawIsoscelesTriangle(ctx, type) {
+    const base = 150; // ベースの長さ
+    let height;
+
+    ctx.beginPath();
+
+    // 鋭角二等辺三角形の設定
+    if (type === 'acute') {
+        height = Math.sqrt(3) * base / 2; // 鋭角二等辺三角形の高さを計算
+        ctx.moveTo(150, 50); // 上の頂点（高さを高めに）
+    } 
+    // 鈍角二等辺三角形の設定
+    else if (type === 'obtuse') {
+        height = 40; // 鈍角二等辺三角形の高さを設定
+        ctx.moveTo(150, 100); // 上の頂点（高さを低めに）
+    }
+
+    ctx.lineTo(150 - base / 2, height + 150);  // 左の頂点
+    ctx.lineTo(150 + base / 2, height + 150); // 右の頂点
+    ctx.closePath();
+
     ctx.fillStyle = "lightgreen"; // 色を設定
+    ctx.fill();
 }
 
+
 function drawRightTriangle(ctx) {
+    ctx.beginPath();
     ctx.moveTo(50, 200);
     ctx.lineTo(200, 200);
     ctx.lineTo(200, 50);
     ctx.lineTo(50, 200);
     ctx.fillStyle = "lightcoral"; // 色を設定
+    ctx.fill();
 }
 
 function drawRightIsoscelesTriangle(ctx) {
     const base = 100;
+    ctx.beginPath();
     ctx.moveTo(100, 200);
     ctx.lineTo(200, 200);
     ctx.lineTo(100, 100);
     ctx.lineTo(100, 200);
     ctx.fillStyle = "yellow"; // 色を設定
+    ctx.fill();
 }
 
 function drawScaleneTriangle(ctx) {
+    ctx.beginPath();
     ctx.moveTo(50, 200);
     ctx.lineTo(150, 100);
     ctx.lineTo(200, 150);
     ctx.lineTo(50, 200);
     ctx.fillStyle = "lightpink"; // 色を設定
+    ctx.fill();
 }
 
 function resetForm() {
