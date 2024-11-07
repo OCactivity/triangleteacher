@@ -40,21 +40,23 @@ function checkTriangle() {
         if (withinTolerance(a, b, tolerance) && withinTolerance(b, c, tolerance)) {
             result = "正三角形";
             drawTriangle("正三角形", a, b, c);
+        } else if (isRightAngle(a, b, c, tolerance)) {
+            if (withinTolerance(a, b, tolerance) || withinTolerance(b, c, tolerance) || withinTolerance(c, a, tolerance)) {
+                result = "直角二等辺三角形";
+                drawTriangle("直角二等辺三角形", a, b, c);
+            } else {
+                result = "直角三角形";
+                drawTriangle("直角三角形", a, b, c);
+            }
         } else if (withinTolerance(a, b, tolerance) || withinTolerance(b, c, tolerance) || withinTolerance(c, a, tolerance)) {
             const base = withinTolerance(a, b, tolerance) ? c : withinTolerance(b, c, tolerance) ? a : b;
             if (isAcuteIsosceles(a, base, tolerance)) {
                 result = "鋭角二等辺三角形";
                 drawTriangle("鋭角二等辺三角形", a, b, c);
-            } else if (isRightAngle(a, b, c, tolerance)) {
-                result = "直角二等辺三角形";
-                drawTriangle("直角二等辺三角形", a, b, c);
             } else {
                 result = "鈍角二等辺三角形";
                 drawTriangle("鈍角二等辺三角形", a, b, c);
             }
-        } else if (isRightAngle(a, b, c, tolerance)) {
-            result = "直角三角形";
-            drawTriangle("直角三角形", a, b, c);
         } else {
             result = "不等辺三角形";
             drawTriangle("不等辺三角形", a, b, c);
@@ -72,13 +74,14 @@ function withinTolerance(x, y, tolerance) {
 }
 
 function isAcuteIsosceles(a, base, tolerance) {
-    return withinTolerance(base ** 2, 2 * a ** 2 * (1 + tolerance), tolerance);
+    return base ** 2 < 2 * a ** 2 * (1 + tolerance);
 }
 
 function isRightAngle(a, b, c, tolerance) {
     const sides = [a, b, c].sort((x, y) => x - y);
     return withinTolerance(sides[0] ** 2 + sides[1] ** 2, sides[2] ** 2, tolerance);
 }
+
 
 function drawTriangle(type, a, b, c) {
     const canvas = document.getElementById("triangleCanvas");
