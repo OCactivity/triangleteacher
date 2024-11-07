@@ -204,5 +204,10 @@ function resetForm() {
     document.querySelector('.output-container').style.display = 'none';
     document.querySelector('.form-container').style.display = 'block';
 
+    // 誤差許容モードをオフにする
+    document.getElementById("toleranceToggle").checked = false;
+
+    // ページをリロードしてリセットを確実に反映
     location.reload();
 }
+
