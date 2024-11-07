@@ -84,7 +84,7 @@ function drawTriangle(type, a, b, c) {
     const canvas = document.getElementById("triangleCanvas");
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 以前の描画をクリア
 
     ctx.beginPath();
     if (type === "正三角形") {
@@ -101,15 +101,11 @@ function drawTriangle(type, a, b, c) {
         drawScaleneTriangle(ctx);
     }
 
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "black";  // 辺の長さテキストの色
     ctx.font = "16px Arial";
     ctx.fillText(`a: ${a}`, 10, 20);
     ctx.fillText(`b: ${b}`, 10, 40);
     ctx.fillText(`c: ${c}`, 10, 60);
-
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
 }
 
 function drawEquilateralTriangle(ctx) {
@@ -131,7 +127,7 @@ function drawEquilateralTriangle(ctx) {
     ctx.lineTo(rightX, rightY);
     ctx.closePath();
 
-    ctx.fillStyle = "lightblue";
+    ctx.fillStyle = "lightblue"; // 色を設定
     ctx.fill();
 }
 
@@ -140,19 +136,20 @@ function drawIsoscelesTriangle(ctx, type) {
     let height;
 
     ctx.beginPath();
+
     if (type === 'acute') {
         height = Math.sqrt(3) * base / 2;
         ctx.moveTo(150, 50);
+        ctx.fillStyle = "lightgreen"; // 鋭角二等辺三角形の色
     } else if (type === 'obtuse') {
         height = 40;
         ctx.moveTo(150, 100);
+        ctx.fillStyle = "orange"; // 鈍角二等辺三角形の色
     }
 
     ctx.lineTo(150 - base / 2, height + 150);
     ctx.lineTo(150 + base / 2, height + 150);
     ctx.closePath();
-
-    ctx.fillStyle = "lightgreen";
     ctx.fill();
 }
 
@@ -161,8 +158,9 @@ function drawRightTriangle(ctx) {
     ctx.moveTo(50, 200);
     ctx.lineTo(200, 200);
     ctx.lineTo(200, 50);
-    ctx.lineTo(50, 200);
-    ctx.fillStyle = "lightcoral";
+    ctx.closePath();
+
+    ctx.fillStyle = "lightcoral"; // 直角三角形の色
     ctx.fill();
 }
 
@@ -172,8 +170,9 @@ function drawRightIsoscelesTriangle(ctx) {
     ctx.moveTo(100, 200);
     ctx.lineTo(200, 200);
     ctx.lineTo(100, 100);
-    ctx.lineTo(100, 200);
-    ctx.fillStyle = "yellow";
+    ctx.closePath();
+
+    ctx.fillStyle = "yellow"; // 直角二等辺三角形の色
     ctx.fill();
 }
 
@@ -182,10 +181,12 @@ function drawScaleneTriangle(ctx) {
     ctx.moveTo(50, 200);
     ctx.lineTo(150, 100);
     ctx.lineTo(200, 150);
-    ctx.lineTo(50, 200);
-    ctx.fillStyle = "lightpink";
+    ctx.closePath();
+
+    ctx.fillStyle = "lightpink"; // 不等辺三角形の色
     ctx.fill();
 }
+
 
 function resetForm() {
     document.getElementById("side1").value = "";
