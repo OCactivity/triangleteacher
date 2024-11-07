@@ -35,7 +35,7 @@ function checkTriangle() {
         result = "三角形は作れません";
         document.getElementById("triangleCanvas").style.display = 'none';
     } else {
-        const tolerance = 0.05;
+        const tolerance = 0.5;
         
         if (withinTolerance(a, b, tolerance) && withinTolerance(b, c, tolerance)) {
             result = "正三角形";
