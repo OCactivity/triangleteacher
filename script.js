@@ -1,3 +1,8 @@
+window.onload = function() {
+    // 誤差許容モードの初期設定（オフ）
+    document.getElementById("toleranceToggle").checked = false;
+};
+
 function checkTriangle() {
     const side1Input = document.getElementById("side1");
     const side2Input = document.getElementById("side2");
