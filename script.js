@@ -30,8 +30,11 @@ function checkTriangle() {
         return;
     }
 
+    // 誤差許容モードの確認と設定
+    const toleranceToggle = document.getElementById("toleranceToggle");
+    const tolerance = toleranceToggle.checked ? 0.04 : 0; // 誤差許容モードがオンなら4%、オフなら0%
+
     let result = "";
-    const tolerance = 0.04;
 
     if (a + b <= c || b + c <= a || c + a <= b) {
         result = "三角形は作れません";
@@ -81,6 +84,7 @@ function isRightAngle(a, b, c, tolerance) {
     const sides = [a, b, c].sort((x, y) => x - y);
     return withinTolerance(sides[0] ** 2 + sides[1] ** 2, sides[2] ** 2, tolerance);
 }
+
 
 
 function drawTriangle(type, a, b, c) {
