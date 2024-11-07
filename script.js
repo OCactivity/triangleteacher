@@ -31,7 +31,7 @@ function checkTriangle() {
     }
 
     let result = "";
-    const tolerance = 0.05;
+    const tolerance = 0.04;
 
     if (a + b <= c || b + c <= a || c + a <= b) {
         result = "三角形は作れません";
