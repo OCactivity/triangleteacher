@@ -204,4 +204,7 @@ function resetForm() {
     document.getElementById("sideLengths").innerText = "";
     document.querySelector('.output-container').style.display = 'none';
     document.querySelector('.form-container').style.display = 'block';
+
+    // Reload the page
+    location.reload();
 }
