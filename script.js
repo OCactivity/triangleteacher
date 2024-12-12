@@ -73,8 +73,6 @@ function checkTriangle() {
 
     document.getElementById("triangleType").innerText = result;
     document.getElementById("sideLengths").innerText = `辺の長さ: ${a}, ${b}, ${c}`;
-    document.querySelector('.output-container').style.display = 'flex';
-    document.querySelector('.form-container').style.display = 'none';
 
     // 面積を計算して表示
     const area = calculateArea(a, b, c);
