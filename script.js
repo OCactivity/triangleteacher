@@ -35,6 +35,18 @@ function checkTriangle() {
         return;
     }
 
+    // 面積を計算して表示
+    const area = calculateArea(a, b, c);
+    if (area > 0) {
+        document.getElementById("triangleArea").innerText = `面積: ${area.toFixed(2)}`;
+    } else {
+        document.getElementById("triangleArea").innerText = "";
+    }
+
+    document.querySelector('.output-container').style.display = 'flex';
+    document.querySelector('.form-container').style.display = 'none';
+}
+
     // 誤差許容モードの確認と設定
     const toleranceToggle = document.getElementById("toleranceToggle");
     const tolerance = toleranceToggle.checked ? 0.04 : 0; // 誤差許容モードがオンなら4%、オフなら0%
@@ -222,13 +234,5 @@ function calculateArea(a, b, c) {
     }
     const s = (a + b + c) / 2; // 半周長
     return Math.sqrt(s * (s - a) * (s - b) * (s - c)); // ヘロンの公式
-}
-
-// 面積を表示する処理を checkTriangle 内に追加
-const area = calculateArea(a, b, c);
-if (area > 0) {
-    document.getElementById("triangleArea").innerText = `面積: ${area.toFixed(2)}`;
-} else {
-    document.getElementById("triangleArea").innerText = "";
 }
 
