@@ -216,3 +216,19 @@ function resetForm() {
     location.reload();
 }
 
+function calculateArea(a, b, c) {
+    if (a + b <= c || b + c <= a || c + a <= b) {
+        return 0; // 無効な三角形の場合
+    }
+    const s = (a + b + c) / 2; // 半周長
+    return Math.sqrt(s * (s - a) * (s - b) * (s - c)); // ヘロンの公式
+}
+
+// 面積を表示する処理を checkTriangle 内に追加
+const area = calculateArea(a, b, c);
+if (area > 0) {
+    document.getElementById("triangleArea").innerText = `面積: ${area.toFixed(2)}`;
+} else {
+    document.getElementById("triangleArea").innerText = "";
+}
+
