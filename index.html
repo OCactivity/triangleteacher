@@ -6,54 +6,134 @@
     <title>三角形をおしえるくん</title>
     <meta name="description" content="各辺の長さから三角形を探求しよう！">
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="background-animation"></div>
+    
     <div class="container">
+        <!-- 結果表示エリア -->
         <div class="output-container">
-            <div class="top-left">
-                <h2>三角形の種類</h2>
-                <p id="triangleType"></p>
-            </div>
-            <div class="bottom-left">
-                <h2>入力された辺の長さ</h2>
-                <p id="sideLengths"></p>
-                <p id="triangleArea"></p>
-            </div>
-            <div class="top-right">
-                <h2>三角形の画像</h2>
-                <canvas id="triangleCanvas" width="300" height="300"></canvas>
-                <p>※三角形の画像はあくまでもイメージだよ</p>
-            </div>
-            <div class="bottom-right">
-                <button id="retryButton" onclick="resetForm()">他の三角形を調べる</button>
+            <div class="result-grid">
+                <div class="result-card triangle-type-card">
+                    <div class="card-header">
+                        <i class="fas fa-shapes"></i>
+                        <h2>三角形の種類</h2>
+                    </div>
+                    <div class="card-content">
+                        <p id="triangleType" class="triangle-type-result"></p>
+                    </div>
+                </div>
+
+                <div class="result-card info-card">
+                    <div class="card-header">
+                        <i class="fas fa-ruler"></i>
+                        <h2>計算結果</h2>
+                    </div>
+                    <div class="card-content">
+                        <p id="sideLengths" class="side-lengths"></p>
+                        <p id="triangleArea" class="area-result"></p>
+                    </div>
+                </div>
+
+                <div class="result-card canvas-card">
+                    <div class="card-header">
+                        <i class="fas fa-image"></i>
+                        <h2>三角形の画像</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="canvas-container">
+                            <canvas id="triangleCanvas" width="300" height="300"></canvas>
+                        </div>
+                        <p class="canvas-note">※三角形の画像はあくまでもイメージだよ</p>
+                    </div>
+                </div>
+
+                <div class="result-card action-card">
+                    <button id="retryButton" onclick="resetForm()" class="retry-btn">
+                        <i class="fas fa-redo"></i>
+                        他の三角形を調べる
+                    </button>
+                </div>
             </div>
         </div>
 
+        <!-- 入力フォームエリア -->
         <div class="form-container">
-            <h1>三角形をおしえるくん</h1>
-            <p>三角形の3辺の長さをそれぞれ入力してね</p>
-            <form id="triangleForm">
-                <label for="side1">1辺目の長さ:</label>
-                <input type="number" id="side1" required><br><br>
-                <label for="side2">2辺目の長さ:</label>
-                <input type="number" id="side2" required><br><br>
-                <label for="side3">3辺目の長さ:</label>
-                <input type="number" id="side3" required><br><br>
-                <button type="button" onclick="checkTriangle()">三角形を調べる</button>
-                
-                <!-- 誤差許容モードのトグルスイッチ -->
-                <div class="toggle-container">
-                    <label for="toleranceToggle"></br>誤差許容モード</label>
-                    <input type="checkbox" id="toleranceToggle" checked>
-                    <p>※オンにすると誤差許容範囲±5%が適用されます。一部結果が実際と異なる場合があります。</p>
+            <div class="form-card">
+                <div class="form-header">
+                    <h1>
+                        <i class="fas fa-calculator"></i>
+                        三角形をおしえるくん
+                    </h1>
+                    <p class="form-subtitle">三角形の3辺の長さをそれぞれ入力してね</p>
                 </div>
-            </form>
+                
+                <form id="triangleForm" class="triangle-form">
+                    <div class="input-group">
+                        <div class="input-wrapper">
+                            <label for="side1">
+                                <i class="fas fa-ruler-horizontal"></i>
+                                1辺目の長さ
+                            </label>
+                            <input type="number" id="side1" required placeholder="例: 3">
+                        </div>
+                        
+                        <div class="input-wrapper">
+                            <label for="side2">
+                                <i class="fas fa-ruler-horizontal"></i>
+                                2辺目の長さ
+                            </label>
+                            <input type="number" id="side2" required placeholder="例: 4">
+                        </div>
+                        
+                        <div class="input-wrapper">
+                            <label for="side3">
+                                <i class="fas fa-ruler-horizontal"></i>
+                                3辺目の長さ
+                            </label>
+                            <input type="number" id="side3" required placeholder="例: 5">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="checkTriangle()" class="submit-btn">
+                        <i class="fas fa-search"></i>
+                        三角形を調べる
+                    </button>
+                    
+                    <div class="toggle-container">
+                        <div class="toggle-wrapper">
+                            <label class="toggle-label">
+                                <i class="fas fa-cog"></i>
+                                誤差許容モード
+                            </label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="toleranceToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <p class="toggle-description">
+                            <i class="fas fa-info-circle"></i>
+                            オンにすると誤差許容範囲±5%が適用されます。一部結果が実際と異なる場合があります。
+                        </p>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- コピーライトのセクション -->
+    <!-- フッター -->
     <div class="footer">
-        <p>作成者：23X3101 染谷 拓海<br>copylight&copy; 2024 三角形をおしえるくん. All Rights Reserved.</p>
+        <div class="footer-content">
+            <p>
+                <i class="fas fa-user"></i>
+                作成者：23X3101 染谷 拓海
+            </p>
+            <p>
+                <i class="fas fa-copyright"></i>
+                2024 三角形をおしえるくん. All Rights Reserved.
+            </p>
+        </div>
     </div>
 
     <script src="script.js"></script>
