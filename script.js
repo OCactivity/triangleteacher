@@ -1,6 +1,6 @@
 window.onload = function() {
-    // 誤差許容モードの初期設定（オフ）
-    document.getElementById("toleranceToggle").checked = false;
+    // 誤差許容モードの初期設定（オン）
+    document.getElementById("toleranceToggle").checked = true;
     
     // 入力フィールドにフォーカス時のアニメーション効果
     const inputs = document.querySelectorAll('input[type="number"]');
@@ -13,35 +13,33 @@ window.onload = function() {
         input.addEventListener('blur', function() {
             this.parentElement.style.transform = 'scale(1)';
         });
+
+        // Enterキーで次の入力フィールドにフォーカス移動
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const inputElements = Array.from(document.querySelectorAll('input[type="number"]'));
+                const currentIndex = inputElements.indexOf(this);
+                const nextIndex = currentIndex + 1;
+                
+                if (nextIndex < inputElements.length) {
+                    inputElements[nextIndex].focus();
+                } else {
+                    checkTriangle();
+                }
+            }
+        });
     });
-    
-    // CSS アニメーションの追加
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
+
+    // トグルスイッチのイベントリスナーを追加
+    const toleranceToggle = document.getElementById("toleranceToggle");
+    toleranceToggle.addEventListener('change', function() {
+        if (this.checked) {
+            console.log("誤差許容モードがオンになりました (±5%)");
+        } else {
+            console.log("誤差許容モードがオフになりました");
         }
-        
-        @keyframes shake {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            10%, 30%, 50%, 70%, 90% {
-                transform: translateX(-5px);
-            }
-            20%, 40%, 60%, 80% {
-                transform: translateX(5px);
-            }
-        }
-    `;
-    document.head.appendChild(style);
+    });
 };
 
 function checkTriangle() {
@@ -56,24 +54,15 @@ function checkTriangle() {
     let hasError = false;
 
     function validateNumber(inputElement, value) {
+        inputElement.classList.remove('input-error');
+        
         if (isNaN(value) || value <= 0) {
-            inputElement.style.backgroundColor = "rgba(255, 107, 107, 0.3)";
-            inputElement.style.borderColor = "#ff6b6b";
-            inputElement.style.boxShadow = "0 0 15px rgba(255, 107, 107, 0.5)";
-            inputElement.value = "エラー: 数字を入力してください";
-            inputElement.style.color = "#ff6b6b";
+            inputElement.classList.add('input-error');
+            inputElement.placeholder = "正の数値を入力してください";
             hasError = true;
-            
-            // エラー時の振動アニメーション
-            inputElement.style.animation = "shake 0.5s ease-in-out";
-            setTimeout(() => {
-                inputElement.style.animation = "";
-            }, 500);
         } else {
-            inputElement.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-            inputElement.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            inputElement.style.boxShadow = "";
-            inputElement.style.color = "white";
+            inputElement.placeholder = inputElement.id === 'side1' ? '例: 3' : 
+                                     inputElement.id === 'side2' ? '例: 4' : '例: 5';
         }
     }
 
@@ -91,7 +80,7 @@ function checkTriangle() {
 
     // 誤差許容モードの確認と設定
     const toleranceToggle = document.getElementById("toleranceToggle");
-    const tolerance = toleranceToggle.checked ? 0.04 : 0; // 誤差許容モードがオンなら4%、オフなら0%
+    const tolerance = toleranceToggle.checked ? 0.05 : 0; // 誤差許容モードがオンなら5%、オフなら0%
 
     let result = "";
 
@@ -111,8 +100,8 @@ function checkTriangle() {
                 drawTriangle("直角三角形", a, b, c);
             }
         } else if (withinTolerance(a, b, tolerance) || withinTolerance(b, c, tolerance) || withinTolerance(c, a, tolerance)) {
-            const base = withinTolerance(a, b, tolerance) ? c : withinTolerance(b, c, tolerance) ? a : b;
-            if (isAcuteIsosceles(a, base, tolerance)) {
+            const sides = [a, b, c].sort((x, y) => x - y);
+            if (sides[0] ** 2 + sides[1] ** 2 > sides[2] ** 2 * (1 - tolerance)) {
                 result = "鋭角二等辺三角形";
                 drawTriangle("鋭角二等辺三角形", a, b, c);
             } else {
@@ -125,7 +114,7 @@ function checkTriangle() {
         }
     }
 
-    // 結果の表示とアニメーション
+    // 結果の表示
     document.getElementById("triangleType").innerText = result;
     document.getElementById("sideLengths").innerText = `辺の長さ: ${a}, ${b}, ${c}`;
 
@@ -166,10 +155,6 @@ function withinTolerance(x, y, tolerance) {
     return Math.abs(x - y) / Math.max(x, y) <= tolerance;
 }
 
-function isAcuteIsosceles(a, base, tolerance) {
-    return base ** 2 < 2 * a ** 2 * (1 + tolerance);
-}
-
 function isRightAngle(a, b, c, tolerance) {
     const sides = [a, b, c].sort((x, y) => x - y);
     return withinTolerance(sides[0] ** 2 + sides[1] ** 2, sides[2] ** 2, tolerance);
@@ -183,12 +168,11 @@ function drawTriangle(type, a, b, c) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // 影の効果を追加
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
     ctx.shadowBlur = 10;
     ctx.shadowOffsetX = 3;
     ctx.shadowOffsetY = 3;
 
-    ctx.beginPath();
     if (type === "正三角形") {
         drawEquilateralTriangle(ctx);
     } else if (type === "鋭角二等辺三角形") {
@@ -209,27 +193,26 @@ function drawTriangle(type, a, b, c) {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    // 辺の長さテキストをより美しく表示
+    // 辺の長さテキストを表示
     ctx.fillStyle = "#333";
-    ctx.font = "bold 16px 'Segoe UI', sans-serif";
+    ctx.font = "bold 14px 'Segoe UI', sans-serif";
     ctx.textAlign = "left";
     
-    // 背景付きテキスト
     const textData = [
         { text: `a: ${a}`, x: 15, y: 25 },
-        { text: `b: ${b}`, x: 15, y: 50 },
-        { text: `c: ${c}`, x: 15, y: 75 }
+        { text: `b: ${b}`, x: 15, y: 45 },
+        { text: `c: ${c}`, x: 15, y: 65 }
     ];
     
     textData.forEach(data => {
         // 背景の白い矩形
         ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-        ctx.fillRect(data.x - 5, data.y - 18, 60, 23);
-        ctx.strokeStyle = "rgba(0, 0, 0, 0.1)";
-        ctx.strokeRect(data.x - 5, data.y - 18, 60, 23);
+        ctx.fillRect(data.x - 5, data.y - 16, 70, 20);
+        ctx.strokeStyle = "rgba(102, 126, 234, 0.3)";
+        ctx.strokeRect(data.x - 5, data.y - 16, 70, 20);
         
         // テキスト
-        ctx.fillStyle = "#333";
+        ctx.fillStyle = "#667eea";
         ctx.fillText(data.text, data.x, data.y);
     });
 }
@@ -393,17 +376,19 @@ function resetForm() {
         formContainer.style.display = 'flex';
         formContainer.style.animation = 'fadeIn 0.5s ease-in-out forwards';
 
-        // 誤差許容モードをオフにする
-        document.getElementById("toleranceToggle").checked = false;
+        // 誤差許容モードをオンにする（元の設定に戻す）
+        document.getElementById("toleranceToggle").checked = true;
         
         // 入力フィールドのスタイルをリセット
         const inputs = document.querySelectorAll('input[type="number"]');
         inputs.forEach(input => {
-            input.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-            input.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            input.style.boxShadow = "";
-            input.style.color = "white";
+            input.classList.remove('input-error');
+            input.placeholder = input.id === 'side1' ? '例: 3' : 
+                               input.id === 'side2' ? '例: 4' : '例: 5';
         });
+
+        // 最初の入力フィールドにフォーカス
+        document.getElementById("side1").focus();
     }, 300);
 }
 
@@ -414,31 +399,3 @@ function calculateArea(a, b, c) {
     const s = (a + b + c) / 2; // 半周長
     return Math.sqrt(s * (s - a) * (s - b) * (s - c)); // ヘロンの公式
 }
-
-// CSS アニメーションの追加
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-30px);
-        }
-    }
-    
-    @keyframes shake {
-        0%, 100% {
-            transform: translateX(0);
-        }
-        10%, 30%, 50%, 70%, 90% {
-            transform: translateX(-5px);
-        }
-        20%, 40%, 60%, 80% {
-            transform: translateX(5px);
-        }
-    }
-`;
-document.head.appendChild(style);
