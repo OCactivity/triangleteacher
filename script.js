@@ -58,7 +58,7 @@ function checkTriangle() {
         
         if (isNaN(value) || value <= 0) {
             inputElement.classList.add('input-error');
-            inputElement.placeholder = "正の数値を入力してください";
+            inputElement.placeholder = "正の数値を入力せよ";
             hasError = true;
         } else {
             inputElement.placeholder = inputElement.id === 'side1' ? '例: 3' : 
@@ -399,3 +399,4 @@ function calculateArea(a, b, c) {
     const s = (a + b + c) / 2; // 半周長
     return Math.sqrt(s * (s - a) * (s - b) * (s - c)); // ヘロンの公式
 }
+
